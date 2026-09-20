@@ -27,6 +27,6 @@ public class CreateUserRequest {
     @Size(min = 8, max = 255)
     private String password;
 
-    @Size(max = 20)
+    @Size(min = 8,max = 20)
     private String phoneNumber;
 }
