@@ -5,6 +5,7 @@ import com.ecommerce.user_service.dto.UpdateUserRequest;
 import com.ecommerce.user_service.dto.UserResponse;
 import com.ecommerce.user_service.entity.User;
 import com.ecommerce.user_service.entity.UserStatus;
+import com.ecommerce.user_service.exception.UserNotFoundException;
 import com.ecommerce.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class UserService {
     }
 
     public UserResponse getUserById(Long id){
-        User user = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found"));
+        User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException(id));
         return toResponse(user);
     }
 
@@ -53,7 +54,7 @@ public class UserService {
 
     public UserResponse updateUser(Long id, UpdateUserRequest request){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         if (request.getFirstName() != null) {
             user.setFirstName(request.getFirstName());
@@ -81,7 +82,7 @@ public class UserService {
     public void deleteUser(Long id) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         userRepository.delete(user);
     }
