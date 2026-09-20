@@ -5,10 +5,12 @@ import com.ecommerce.user_service.dto.UpdateUserRequest;
 import com.ecommerce.user_service.dto.UserResponse;
 import com.ecommerce.user_service.entity.User;
 import com.ecommerce.user_service.entity.UserStatus;
+import com.ecommerce.user_service.exception.EmailAlreadyExistsException;
 import com.ecommerce.user_service.exception.UserNotFoundException;
 import com.ecommerce.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +22,13 @@ public class UserService {
     private final UserRepository userRepository;
 
 
+    @Transactional
     public UserResponse createUser(CreateUserRequest request){
+
+        if(userRepository.existsByEmail(request.getEmail())){
+            throw new EmailAlreadyExistsException(request.getEmail());
+        }
+
         User user = new User();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
