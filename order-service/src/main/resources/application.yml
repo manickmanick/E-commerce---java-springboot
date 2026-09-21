@@ -1,6 +1,13 @@
 spring:
   application:
     name: order-service
+  cloud:
+    openFeign:
+      client:
+        config:
+          user-service:
+            connect-timeout: 1000
+            read-timeout: 3000
 
 server:
   port: 8083

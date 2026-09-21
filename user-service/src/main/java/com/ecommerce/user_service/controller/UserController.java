@@ -24,10 +24,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserResponse getUser(@PathVariable Long id){
+    public UserResponse getUser(@PathVariable Long id) throws InterruptedException{
 
         if (id == 999) {
             throw new RuntimeException("Simulated User Service failure");
+        }
+        if(id == 888){
+            Thread.sleep(10_000);
         }
         return userService.getUserById(id);
     }
