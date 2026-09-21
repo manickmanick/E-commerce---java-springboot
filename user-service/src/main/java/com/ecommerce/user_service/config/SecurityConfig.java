@@ -33,12 +33,13 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/users/login").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
-                                .requestMatchers("/api/users/admin/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/users/**")
-                                .hasRole("ADMIN")
-                                .anyRequest().authenticated()
+                        auth
+//                        auth.requestMatchers("/api/users/login").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
+//                                .requestMatchers("/api/users/admin/**").hasRole("ADMIN")
+//                                .requestMatchers(HttpMethod.DELETE, "/api/users/**")
+//                                .hasRole("ADMIN")
+                                .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
                     jwt.jwtAuthenticationConverter(
