@@ -1,14 +1,15 @@
 package com.ecommerce.user_service.service;
 
-import com.ecommerce.user_service.dto.CreateUserRequest;
-import com.ecommerce.user_service.dto.UpdateUserRequest;
-import com.ecommerce.user_service.dto.UserResponse;
+import com.ecommerce.user_service.dto.*;
 import com.ecommerce.user_service.entity.User;
 import com.ecommerce.user_service.entity.UserStatus;
 import com.ecommerce.user_service.exception.EmailAlreadyExistsException;
+import com.ecommerce.user_service.exception.InvalidCredentialsException;
 import com.ecommerce.user_service.exception.UserNotFoundException;
 import com.ecommerce.user_service.repository.UserRepository;
+import com.ecommerce.user_service.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,8 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
 
     @Transactional
@@ -33,7 +36,11 @@ public class UserService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        user.setPassword(encodedPassword);
+
+
         user.setPhoneNumber(request.getPhoneNumber());
 
         user.setStatus(UserStatus.ACTIVE);
@@ -106,6 +113,25 @@ public class UserService {
                 user.getStatus(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
+        );
+    }
+
+    public LoginResponse login(LoginRequest request){
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(InvalidCredentialsException::new);
+
+        boolean passwordMatches = passwordEncoder.matches(request.getPassword(),user.getPassword());
+
+        if (!passwordMatches) {
+            throw new InvalidCredentialsException();
+        }
+
+        String token = jwtService.generateToken(user);
+
+        return new LoginResponse(
+                user.getId(),
+                user.getEmail(),
+                token
         );
     }
 

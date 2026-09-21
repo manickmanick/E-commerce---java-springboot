@@ -1,8 +1,6 @@
 package com.ecommerce.user_service.controller;
 
-import com.ecommerce.user_service.dto.CreateUserRequest;
-import com.ecommerce.user_service.dto.UpdateUserRequest;
-import com.ecommerce.user_service.dto.UserResponse;
+import com.ecommerce.user_service.dto.*;
 import com.ecommerce.user_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +43,11 @@ public class UserController {
         return "User deleted successfully.";
     }
 
+    @PostMapping("/login")
+    public LoginResponse login(
+            @Valid @RequestBody LoginRequest request) {
+
+        return userService.login(request);
+    }
 
 }
