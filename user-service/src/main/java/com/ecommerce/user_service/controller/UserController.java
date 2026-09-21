@@ -45,7 +45,6 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    @PreAuthorize("hasRole('ADMIN')")
     public LoginResponse login(
             @Valid @RequestBody LoginRequest request) {
 
