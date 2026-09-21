@@ -5,6 +5,7 @@ import com.ecommerce.user_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,10 +45,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @PreAuthorize("hasRole('ADMIN')")
     public LoginResponse login(
             @Valid @RequestBody LoginRequest request) {
 
         return userService.login(request);
     }
 
+    @GetMapping("/admin/test")
+    public String adminTest() {
+        return "You are an ADMIN";
+    }
 }
