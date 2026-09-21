@@ -20,3 +20,8 @@ server:
 jwt:
   secret: c3VwZXItc2VjcmV0LWp3dC1zaWduaW5nLWtleS1mb3ItZGV2ZWxvcG1lbnQtZW52aXJvbm1lbnQtMjAyNg==
   expiration: 15m
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
