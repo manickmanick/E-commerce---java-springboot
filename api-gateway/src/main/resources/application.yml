@@ -9,11 +9,14 @@ spring:
     gateway:
       server:
         webflux:
-          routes:
-            - id: user-service
-              uri: http://localhost:8082
-              predicates:
-                - Path=/api/users/**
+          discovery:
+            locator:
+              enabled: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
 
 jwt:
   secret: c3VwZXItc2VjcmV0LWp3dC1zaWduaW5nLWtleS1mb3ItZGV2ZWxvcG1lbnQtZW52aXJvbm1lbnQtMjAyNg==
