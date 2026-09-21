@@ -4,3 +4,13 @@ spring:
 
 server:
   port: 8083
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      userService:
+        sliding-window-type: count_based
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        wait-duration-in-open-state: 25s

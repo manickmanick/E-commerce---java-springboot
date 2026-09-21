@@ -25,6 +25,10 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserResponse getUser(@PathVariable Long id){
+
+        if (id == 999) {
+            throw new RuntimeException("Simulated User Service failure");
+        }
         return userService.getUserById(id);
     }
 
